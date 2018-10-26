@@ -371,6 +371,7 @@ export default class ToolTip extends Component {
       newProps.active = true
       portalNodes[this.props.group].timeout = setTimeout(() => {
         props.active = false
+        props.onTimeout()
         this.renderPortal(props)
       }, this.props.tooltipTimeout)
     }
