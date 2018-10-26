@@ -365,6 +365,7 @@ export default class ToolTip extends Component {
 
     if (portalNodes[this.props.group] && portalNodes[this.props.group].timeout) {
       clearTimeout(portalNodes[this.props.group].timeout)
+      props.onTimeout()
     }
 
     if (this.props.active && !props.active) {
@@ -382,6 +383,7 @@ export default class ToolTip extends Component {
     if (portalNodes[this.props.group]) {
       ReactDOM.unmountComponentAtNode(portalNodes[this.props.group].node)
       clearTimeout(portalNodes[this.props.group].timeout)
+      props.onTimeout()
       document.body.removeChild(portalNodes[this.props.group].node);
     }
   }
