@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import ReactDOM, {unstable_renderSubtreeIntoContainer as renderSubtreeIntoContainer} from 'react-dom'
+import ReactDOM, { unstable_renderSubtreeIntoContainer as renderSubtreeIntoContainer } from 'react-dom'
 
 const FG_SIZE = 8
 const BG_SIZE = 9
@@ -36,7 +36,7 @@ class Card extends Component {
     position: 'right',
     arrow: null,
     align: null,
-    style: {style: {}, arrowStyle: {}},
+    style: { style: {}, arrowStyle: {} },
     useHover: true
   }
   state = {
@@ -52,7 +52,7 @@ class Card extends Component {
   }
   getGlobalStyle() {
     if (!this.props.parentEl) {
-      return {display: 'none'}
+      return { display: 'none' }
     }
 
     const style = {
@@ -91,7 +91,7 @@ class Card extends Component {
     let bgColorBorder = `11px solid ${bgBorderColor}`
     let bgTransBorder = `${BG_SIZE}px solid transparent`
 
-    let {position, arrow} = this.props
+    let { position, arrow } = this.props
 
     if (position === 'left' || position === 'right') {
       fgStyle.top = '50%'
@@ -163,7 +163,7 @@ class Card extends Component {
       }
     }
 
-    let {color, borderColor, ...propsArrowStyle} = this.props.style.arrowStyle
+    let { color, borderColor, ...propsArrowStyle } = this.props.style.arrowStyle
 
     return {
       fgStyle: this.mergeStyle(fgStyle, propsArrowStyle),
@@ -289,19 +289,27 @@ class Card extends Component {
       }
     }
 
-    return {style, arrowStyle}
+    return { style, arrowStyle }
   }
   handleMouseEnter = () => {
-    this.props.active && this.props.useHover && this.setState({hover: true})
+    this.props.active && this.props.useHover && this.setState({
+      hover: true
+    }, () => {
+      this.props.enterTooltip()
+    })
   }
   handleMouseLeave = () => {
-    this.setState({hover: false})
+    this.setState({
+      hover: false
+    }, () => {
+      this.props.leaveTooltip()
+    })
   }
   componentDidMount() {
     this.updateSize()
   }
   componentWillReceiveProps() {
-    this.setState({transition: this.state.hover || this.props.active ? 'all' : 'opacity'}, () => {
+    this.setState({ transition: this.state.hover || this.props.active ? 'all' : 'opacity' }, () => {
       this.updateSize()
     })
   }
@@ -313,14 +321,14 @@ class Card extends Component {
     })
   }
   render() {
-    let {style, arrowStyle} = this.checkWindowPosition(this.getGlobalStyle(), this.getArrowStyle())
+    let { style, arrowStyle } = this.checkWindowPosition(this.getGlobalStyle(), this.getArrowStyle())
 
     return (
       <div style={style} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
         {this.props.arrow ? (
           <div>
-            <span style={arrowStyle.fgStyle}/>
-            <span style={arrowStyle.bgStyle}/>
+            <span style={arrowStyle.fgStyle} />
+            <span style={arrowStyle.bgStyle} />
           </div>)
           : null
         }
@@ -335,8 +343,8 @@ var portalNodes = {}
 export default class ToolTip extends Component {
   static propTypes = {
     parent: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.object
+      PropTypes.string,
+      PropTypes.object
     ]).isRequired,
     active: PropTypes.bool,
     group: PropTypes.string,
@@ -365,7 +373,6 @@ export default class ToolTip extends Component {
 
     if (portalNodes[this.props.group] && portalNodes[this.props.group].timeout) {
       clearTimeout(portalNodes[this.props.group].timeout)
-      props.onTimeout()
     }
 
     if (this.props.active && !props.active) {
@@ -383,7 +390,6 @@ export default class ToolTip extends Component {
     if (portalNodes[this.props.group]) {
       ReactDOM.unmountComponentAtNode(portalNodes[this.props.group].node)
       clearTimeout(portalNodes[this.props.group].timeout)
-      props.onTimeout()
       document.body.removeChild(portalNodes[this.props.group].node);
     }
   }
@@ -399,9 +405,9 @@ export default class ToolTip extends Component {
     if (!portalNodes[this.props.group]) {
       this.createPortal()
     }
-    let {parent, ...other} = props
+    let { parent, ...other } = props
     let parentEl = typeof parent === 'string' ? document.querySelector(parent) : parent
-    renderSubtreeIntoContainer(this, <Card parentEl={parentEl} {...other}/>, portalNodes[this.props.group].node)
+    renderSubtreeIntoContainer(this, <Card parentEl={parentEl} {...other} />, portalNodes[this.props.group].node)
   }
   shouldComponentUpdate() {
     return false
@@ -412,7 +418,7 @@ export default class ToolTip extends Component {
 }
 
 const executeFunctionIfExist = (object, key) => {
-  if (Object.prototype.hasOwnProperty.call(object, key)){
+  if (Object.prototype.hasOwnProperty.call(object, key)) {
     object[key]()
   }
 }
@@ -447,8 +453,8 @@ export class StatefulToolTip extends Component {
     } = this.props
 
     return [
-      <span className={ className } onMouseEnter={ this.onMouseEnter } onMouseLeave={ this.onMouseLeave } ref={ p => this.parent = p } key="parent">{ this.props.parent }</span>,
-      this.parent ? <ToolTip { ...props } active={ this.state.tooltipVisible } parent={ this.parent } key="tooltip">{ this.props.children }</ToolTip> : null,
+      <span className={className} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={p => this.parent = p} key="parent">{this.props.parent}</span>,
+      this.parent ? <ToolTip {...props} active={this.state.tooltipVisible} parent={this.parent} key="tooltip">{this.props.children}</ToolTip> : null,
     ]
   }
 }
