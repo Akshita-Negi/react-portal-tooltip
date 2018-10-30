@@ -348,12 +348,18 @@ export default class ToolTip extends Component {
     ]).isRequired,
     active: PropTypes.bool,
     group: PropTypes.string,
-    tooltipTimeout: PropTypes.number
+    tooltipTimeout: PropTypes.number,
+    onTimeout: PropTypes.func,
+    leaveTooltip: PropTypes.func,
+    enterTooltip: PropTypes.func
   }
   static defaultProps = {
     active: false,
     group: 'main',
-    tooltipTimeout: 500
+    tooltipTimeout: 500,
+    onTimeout: () => {},
+    leaveTooltip: () => {},
+    enterTooltip: () => {}
   }
   componentDidMount() {
     if (!this.props.active) {
