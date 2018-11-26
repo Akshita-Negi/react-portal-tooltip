@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM, { unstable_renderSubtreeIntoContainer as renderSubtreeIntoContainer } from 'react-dom'
@@ -357,9 +359,9 @@ export default class ToolTip extends Component {
     active: false,
     group: 'main',
     tooltipTimeout: 500,
-    onTimeout: () => {},
-    leaveTooltip: () => {},
-    enterTooltip: () => {}
+    onTimeout: () => { },
+    leaveTooltip: () => { },
+    enterTooltip: () => { }
   }
   componentDidMount() {
     if (!this.props.active) {
@@ -393,7 +395,9 @@ export default class ToolTip extends Component {
     this.renderPortal(newProps)
   }
   componentWillUnmount() {
-    if (portalNodes[this.props.group]) {
+    if (portalNodes[this.props.group] &&
+      portalNodes[this.props.group].node.parentNode !== document.body
+    ) {
       ReactDOM.unmountComponentAtNode(portalNodes[this.props.group].node)
       clearTimeout(portalNodes[this.props.group].timeout)
       document.body.removeChild(portalNodes[this.props.group].node);
