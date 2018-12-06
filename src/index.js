@@ -452,7 +452,7 @@ export default class ToolTip extends Component {
     document.body.appendChild(portalNodes[this.props.group].node)
   }
   renderPortal(props) {
-    if (!portalNodes[this.props.group]) {
+    if (!portalNodes[this.props.group] || document.getElementsByClassName('ToolTipPortal').length === 0) {
       this.createPortal()
     }
     let { parent, ...other } = props
